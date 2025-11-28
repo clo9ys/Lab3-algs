@@ -1,7 +1,7 @@
 import pytest
 from src.stack_list import StackOnList
 
-@pytest.mark.parametrize("value", [52, 17, 104])
+@pytest.mark.parametrize("value", [52, 17, 104, 23])
 def test_push(value):
     st = StackOnList()
     st.push(value)
@@ -29,3 +29,12 @@ def test_is_empty():
     assert st.is_empty()
     st.push(52)
     assert not st.is_empty()
+
+def test_min_peek_pop_exception():
+    st = StackOnList()
+    with pytest.raises(IndexError):
+        st.pop()
+    with pytest.raises(IndexError):
+        st.peek()
+    with pytest.raises(IndexError):
+        st.min()
