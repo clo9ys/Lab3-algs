@@ -1,6 +1,10 @@
 from src.radix_sort import radix_sort
+import pytest
 
-def test_radix_sort():
-    assert radix_sort([170, 45, 75, 90, 802, 24, 2, 66]) == [2, 24, 45, 66, 75, 90, 170, 802]
-    assert radix_sort([]) == []
-    assert radix_sort([52]) == [52]
+@pytest.mark.parametrize("lst, sortd", [
+    ([5, 1, 4, 2, 8], [1, 2, 4, 5, 8]),
+    ([], []),
+    ([52], [52])
+])
+def test_radix_sort(lst, sortd):
+    assert radix_sort(lst) == sortd

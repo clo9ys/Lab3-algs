@@ -1,6 +1,10 @@
 from src.counting_sort import counting_sort
+import pytest
 
-def test_counting_sort():
-    assert counting_sort([4, 2, 2, 8, 3, 3, 1]) == [1, 2, 2, 3, 3, 4, 8]
-    assert counting_sort([]) == []
-    assert counting_sort([52]) == [52]
+@pytest.mark.parametrize("lst, sortd", [
+    ([5, 1, 4, 2, 8], [1, 2, 4, 5, 8]),
+    ([], []),
+    ([52], [52])
+])
+def test_counting_sort(lst, sortd):
+    assert counting_sort(lst) == sortd

@@ -1,7 +1,12 @@
 import pytest
 from src.fibos import fibo_recursive
 
-def test_fibo_recursive():
-    assert fibo_recursive(7) == 13
-    assert fibo_recursive(0) == 0
-    assert fibo_recursive(1) == 1
+@pytest.mark.parametrize("value, expected", [
+    (0, 0),
+    (1, 1),
+    (5, 5),
+    (7, 13)
+])
+def test_fibo_recursive(value, expected):
+    assert fibo_recursive(value) == expected
+

@@ -1,6 +1,10 @@
 from src.heap_sort import heap_sort
+import pytest
 
-def test_heap_sort():
-    assert heap_sort([3, 7, 1, 5, 2]) == [1, 2, 3, 5, 7]
-    assert heap_sort([]) == []
-    assert heap_sort([52]) == [52]
+@pytest.mark.parametrize("lst, sortd", [
+    ([5, 1, 4, 2, 8], [1, 2, 4, 5, 8]),
+    ([], []),
+    ([52], [52])
+])
+def test_heap_sort(lst, sortd):
+    assert heap_sort(lst) == sortd
