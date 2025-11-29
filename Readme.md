@@ -26,6 +26,7 @@ python -m cli fibo 10 -r           # рекурсивный вариант
 python -m cli factorial 5
 python -m cli sort quick "3 1 2"
 python -m cli stack                # режим работы со стеком
+python -m cli benchmark            # запуск бенчмарков
 ```
 
 ### Интерактивное меню

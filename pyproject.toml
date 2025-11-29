@@ -23,7 +23,7 @@ pythonpath = ["src"]
 source = ["src"]
 branch = true
 parallel = true
-omit = ["*/__init__.py",]
+omit = ["*/__init__.py", "src/benchmark.py", "src/generators.py"]
 
 [tool.coverage.report]
 show_missing = true

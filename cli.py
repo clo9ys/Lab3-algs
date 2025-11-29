@@ -9,23 +9,19 @@ from src.radix_sort import radix_sort
 from src.bucket_sort import bucket_sort
 from src.heap_sort import heap_sort
 from src.stack_list import StackOnList
+from src.benchmark import benchmark_sorts
+from src.generators import *
 
 app = typer.Typer(help="Lab3 algorithms: sorts, fibonacci, factorial, stack")
 
 
 @app.command("fibo")
-def fib(
-    n: int,
-    r: bool = typer.Option(False, "-r", "--recursive", help="Использовать рекурсию"),
-):
+def fib(n: int, r: bool = typer.Option(False, "-r", "--recursive", help="Использовать рекурсию")):
     typer.echo(f"Result: {fibo_recursive(n) if r else fibo(n)}")
 
 
 @app.command("factorial")
-def fact(
-    n: int,
-    r: bool = typer.Option(False, "-r", "--recursive", help="Использовать рекурсию"),
-):
+def fact(n: int, r: bool = typer.Option(False, "-r", "--recursive", help="Использовать рекурсию")):
     typer.echo(f"Result: {factorial_recursive(n) if r else factorial(n)}")
 
 
@@ -80,7 +76,7 @@ def stack():
                     typer.echo(f"minimal: {stck.min()}")
                 case "len":
                     typer.echo(f"length: {len(stck)}")
-                case "empty" | "is empty":
+                case "empty" | "is_empty":
                     typer.echo(f"is empty: {stck.is_empty()}")
                 case "print":
                     typer.echo(f"stack: {stck.lst}")
@@ -90,45 +86,34 @@ def stack():
                     typer.echo("Unknown stack command")
         except IndexError as err:
             typer.echo(f"{err}")
+        except ValueError:
+            typer.echo(f"Value must to be integer")
 
+@app.command("benchmark")
+def bench(n: int = 10000) -> dict[str, dict[str, float]]:
+    arrays = {
+        "random": rand_int_array(n, 0, 1000),
+        "reversed": reverse_sorted(n),
+        "many_duplicates": many_duplicates(n)
+    }
 
+    algos = {
+        "bubble": bubble_sort,
+        "quick": quick_sort,
+        "counting": counting_sort,
+        "radix": radix_sort,
+        "bucket": bucket_sort,
+        "heap": heap_sort,
+    }
 
-@app.command("interactive")
-def interactive():
-    """
-    Интерактивный режим: выбор команды и ввод параметров, повторяется до выхода.
-    """
-    while True:
-        typer.echo("\nChoose action:")
-        typer.echo("1. Fibonacci")
-        typer.echo("2. Factorial")
-        typer.echo("3. Sorts")
-        typer.echo("4. Stack")
-        typer.echo("5. Exit")
+    results = benchmark_sorts(arrays, algos)
 
-        cmd = input("> ").strip()
+    for arr_name, times in results.items():
+        print(f"\n=== {arr_name} ===")
+        for algo_name, t in times.items():
+            print(f"{algo_name:8s}: {t:.6f} s")
 
-        match cmd:
-            case "1":
-                n = int(input("Input number: "))
-                r = input("Recursive? (y/N): ").strip().lower() == "y"
-                fib(n, r)
-            case "2":
-                n = int(input("Input number: "))
-                r = input("Recursive? (y/N): ").strip().lower() == "y"
-                fact(n, r)
-            case "3":
-                typer.echo("Sorting types: bubble, quick, counting, radix, bucket, heap")
-                stype = input("Sorting type: ").strip()
-                arr = input("Array (space separated): ").strip()
-                sort(stype, arr)
-            case "4":
-                stack()
-            case "5":
-                typer.echo("Exit")
-                break
-            case _:
-                typer.echo("Unknown command")
+    return results
 
 if __name__ == "__main__":
     app()
